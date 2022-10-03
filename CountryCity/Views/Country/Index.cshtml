@@ -1,0 +1,69 @@
+﻿
+
+
+<div class="d-flex flex-row justify-content-evenly">
+<div class="col-4">
+     <select class="form-select " id="selectedCountryId" >
+        <option >Choose...</option>
+            @foreach (var item in ViewBag.allCountries)
+                          {
+                      
+                       <option  value="@item.Id" >@item.CountryName</option>
+                           }
+        </select>
+
+</div>
+
+<div class="col-4 countyCitiesDiv">
+    <select class="form-select" id="countryCities">
+        <option selected>Cities</option>
+ 
+</select>
+
+</div>
+
+
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+
+    var selectedCountryId = $("#selectedCountryId").val();
+    var selectedCountryName = $("#selectedCountryId ").text();
+
+   $("#selectedCountryId").change(function(){
+       var selectedCountryId = $("#selectedCountryId").val();
+       var selectedCountryName = $("#selectedCountryId ").text();
+       
+    $.ajax({
+    url:"/Country/GetCity",
+    type:"GET",
+    dataType:'json',
+    data:{id:selectedCountryId},
+    
+    success:(result)=>{
+        console.log(result)
+        $('#countryCities').html("");
+        $(result).each((i,item)=>{
+        $('#countryCities').append(`
+           
+        <option  value=${item.id} >${item.cityName}</option>
+        
+        `);
+
+         })
+
+
+
+        },
+        error:function(xhr,ajaxOptions,thrownError){
+                        alert(xhr.status),
+                        alert(thrownError)
+                    }
+        })
+   })
+
+
+
+
+</script>
